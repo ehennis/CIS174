@@ -9,7 +9,7 @@
         public IActionResult Index()
         {
             ViewBag.Name = "Evan";
-            ViewBag.FV = "999.99";
+            ViewBag.FV = 999.99;
             return View();
         }
 4) Add Razor View 'Index'
