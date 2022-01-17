@@ -2,9 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/2022-SPR/Week01 Demos/WebApplication2/WebApplication2/bin/Debug/net5.0
-/2022-SPR/Week01 Demos/WebApplication2/WebApplication2/obj
-/2022-SPR/Week01 Demos/WebApplication2/.vs/WebApplication2
-/2022-SPR/Week01 Demos/WebApplication2/WebApplication2/Properties/ServiceDependencies/
-/2022-SPR/Week01 Demos/WebApplication2/WebApplication2/WebApplication2.csproj.user
-/2022-SPR/Week01 Demos/WebApplication2/WebApplication2/bin/
+**/bin/Debug/net5.0
+**/obj
+**/.vs/
+**/ServiceDependencies/
+*.csproj.user
+**/bin/
