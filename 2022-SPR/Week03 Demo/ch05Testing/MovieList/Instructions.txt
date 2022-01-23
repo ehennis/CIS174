@@ -1,0 +1,100 @@
+﻿Repository/Unit of work Design Pattern: 
+	IIS -> Controller -> {Unit of Work (repository and DbContext)} -> EF/Database
+1) Add repository
+	Create Repository folder
+	Create 'IMovieRepository.cs'
+	Create 'MovieRepository.cs'
+2) Replace MovieDbContext with IMovieRepository in 'HomeController.cs'
+        private IMovieRepository movieRepository;
+            var movies = this.movieRepository.GetAllMovies();
+3) Replace MovieDbContext with IMovieRepository in 'MovieController.cs'
+    public class MovieController : Controller
+    {
+        private IMovieRepository movieRepository;
+
+        public MovieController(IMovieRepository repository)
+        {
+            this.movieRepository = repository;
+        }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            ViewBag.Action = "Add";
+            ViewBag.Genres = this.movieRepository.GetAllGenres();
+            return View("Edit", new Movie());
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            ViewBag.Genres = this.movieRepository.GetAllGenres();
+            var movie = this.movieRepository.Find(id);
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                if (movie.MovieId == 0)
+                {
+                    this.movieRepository.InsertMovie(movie);
+                }
+                else
+                {
+                    this.movieRepository.UpdateMovie(movie);
+                }
+                this.movieRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (movie.MovieId == 0) ? "Add": "Edit";
+                ViewBag.Genres = this.movieRepository.GetAllGenres();
+                return View(movie);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var movie = this.movieRepository.Find(id);
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Movie movie)
+        {
+            this.movieRepository.DeleteMovie(movie);
+            return RedirectToAction("Index", "Home");
+        }
+    }
+
+4) Add Startup.cs DI code: 
+	services.AddScoped<IMovieRepository, MovieRepository>();
+
+** TESTING **
+5) Create MovieListTest "MSTest Project"
+6) Install 'Moq' from NuGet
+7) Create 'HomeControllerTest.cs'
+** Use actual DbContext **
+8) Create 'MovieRepositoryTest.cs'
+9) Add 'virtual' to DbSet properties
+10) Add default constructor to MovieContext
+        public MovieContext() : base() { }
+** Use In Memory **
+11) Add Micorosoft.EntityFrameworkCore.InMemory from NuGet
+12) Create 'MovieRepositoryInMemoryTest.cs'
+13) Create InMemmory MovieContext
+14) Test drive GetAllGenresByName(..)
+
+
+*********************
+Create a null exception on save
+Show the stack trace
+Demo Error Page
+Demo Error Helper
+Demo breakpoints
