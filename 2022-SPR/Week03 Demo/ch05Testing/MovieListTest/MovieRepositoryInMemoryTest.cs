@@ -46,8 +46,7 @@ namespace MovieListTest
         {
             //return this.context.Movies.Include(m => m.Genre).OrderBy(m => m.Name).ToList();
             var movies = repository.GetAllMovies();
-            Assert.AreEqual(4, movies.Count());
-            
+            Assert.AreEqual(4, movies.Count());            
         }
 
 
