@@ -1,0 +1,31 @@
+﻿1) Show Startup.cs
+	AddControllerWithViews()
+	UseRouting()
+	UseEndPoints()
+2) Show URL with Action
+	Home/Index
+	Home/Privacy
+3) Show URL with Action and Id
+	Home/Display/10
+4) Multiple Routes (and Static Content)
+	Home/StaticContent/Page/1
+	Startup.cs =>
+                endpoints.MapControllerRoute(
+                    name: "static",
+                    pattern: "{controller=Home}/{action}/Page/{num}");
+	HomeController.cs =>
+        public IActionResult StaticContent(string num)
+        {
+            return Content($"Static Content: {num}");
+        }
+5) Route Attributes
+	HomeController.cs
+        [Route("/")]
+        public IActionResult IndexOverride()
+        {
+            return Content("Index Override!");
+        }
+6) Controller Route Attributes
+    Create OtherController.cs
+    /Custom/Other/Index
+7) Areas (Show Chapter7 Guitar App)
