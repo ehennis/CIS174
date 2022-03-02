@@ -1,0 +1,27 @@
+﻿Razor Syntax
+1) Index.cshtml
+	Checkout block setting the message
+	Checkout inline  blocks displaying ViewBag
+2) Loop (Index.cshtml)
+    <select name="Count" id="Count">
+        @for (int i = 0; i < 10; i++)
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+3) Conditional (Index.cshtml)
+    @if (ViewBag.CustomerName == "John")
+            {
+                <p>Hello, John</p>
+            }
+4) Set customer name (HomeController.cs)
+        public IActionResult Index()
+        {
+            ViewBag.CustomerName = "John";
+            return View();
+        }
+** Run Site **
+Razor Project Layout
+5) Start.cs => Checkout ConfigureServices(..) and Configure(..)
+5) HomeController.cs => Index() and Privacy()
+Layour

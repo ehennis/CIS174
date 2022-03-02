@@ -1,0 +1,32 @@
+﻿@{
+    string message = "Welcome!";
+    if (ViewBag.CustomerName != null)
+    {
+        message = "Welcome Back!";
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+</head>
+<body>
+    <h1>@message</h1>
+    <p>Customer Name: @ViewBag.CustomerName</p>
+    <p>2 + 2 = @(2 + 2)</p>
+    <label>Count to 10</label>
+    <select name="Count" id="Count">
+        @for (int i = 0; i < 10; i++)
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+    @if (ViewBag.CustomerName == "John")
+            {
+                <p>Hello, John</p>
+            }
+    
+</body>
+</html>

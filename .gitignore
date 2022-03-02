@@ -8,3 +8,4 @@
 **/ServiceDependencies/
 *.csproj.user
 **/bin/
+/2022-SPR/Week06 Demo/Week06/Week06/wwwroot

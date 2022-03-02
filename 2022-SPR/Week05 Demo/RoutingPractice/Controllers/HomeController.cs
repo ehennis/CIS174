@@ -26,16 +26,16 @@ namespace RoutingPractice.Controllers
             }
         }
                 
-        //public IActionResult StaticContent(string num)
-        //{
-        //    return Content($"Static Content: {num}");
-        //}
-        //
-        //[Route("/")]
-        //public IActionResult IndexOverride()
-        //{
-        //    return Content("Index Override!");
-        //}
+        public IActionResult StaticContent(string num)
+        {
+            return Content($"Static Content: {num}");
+        }
+        
+        [Route("/")]
+        public IActionResult IndexOverride()
+        {
+            return Content("Index Override!");
+        }
 
 
     }

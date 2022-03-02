@@ -21,9 +21,9 @@ namespace RoutingPractice
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(
-                //    name: "static",
-                //    pattern: "{controller=Home}/{action}/Page/{num}");
+                endpoints.MapControllerRoute(
+                    name: "static",
+                    pattern: "{controller=Home}/{action}/Page/{num}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
