@@ -1,0 +1,26 @@
+﻿Form Post
+1) Create <form> in Index.cshtml
+    <form asp-action="Add" method="post">
+        <label for="description">Description</label>
+        <input type="text" name="description" />
+        <button type="submit">Add</button>
+    </form>
+
+2) Create Add method in HomeController
+        [HttpPost]
+        public IActionResult Add(string description)
+        {
+            string desc = description;
+            return View();
+        }
+
+3) Add Model to Index.cshtml
+        @model ToDo
+
+4) Update Add method in HomeController
+        [HttpPost]
+        public IActionResult Add(ToDo task)
+        {
+            string desc = task.Description;
+            return View();
+        }

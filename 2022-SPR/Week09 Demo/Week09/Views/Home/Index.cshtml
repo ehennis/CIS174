@@ -1,0 +1,33 @@
+﻿@model ToDo
+@{
+    string message = "Welcome!";
+    if (ViewBag.CustomerName != null)
+    {
+        message = "Welcome Back!";
+    }
+
+    int num = Context.Session.GetInt32("num").Value;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+</head>
+<body>
+    <h1>@message</h1>
+    <p>Customer Name: @ViewBag.CustomerName</p>
+    <div>Code Block: @num</div>
+    <div>Expression: @Context.Session.GetInt32("num")</div>
+
+    <br /><br />
+    <form asp-action="Add" method="post">
+        <label for="description">Description</label>
+        <input type="text" name="description" />
+        <button type="submit">Add</button>
+    </form>
+
+</body>
+</html>
