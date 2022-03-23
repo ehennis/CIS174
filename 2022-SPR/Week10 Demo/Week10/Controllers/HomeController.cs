@@ -35,11 +35,6 @@ namespace Week08.Controllers
             return View();
         }
 
-        public IActionResult Movie()
-        {
-            return View();
-        }
-
         public IActionResult Privacy()
         {
             var usrname = Request.Cookies["username"];
@@ -60,30 +55,6 @@ namespace Week08.Controllers
         {
             string desc = task.Description;
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult AddMovie(Movie movie)
-        {
-            string key = nameof(Week10.Models.Movie.Name);
-            var vally = ModelState.GetValidationState(key);
-            if(vally == ModelValidationState.Valid)
-            {
-                if( movie.Name == "Evan")
-                {
-                    ModelState.AddModelError(key, "Don't use your first name, dummy.");
-                }
-            }
-
-            if (ModelState.IsValid)
-            {
-                return RedirectToAction("List", "Movie");
-            }
-            else
-            {
-                ModelState.AddModelError("", "There are errors!");
-                return View("Movie");
-            }
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
