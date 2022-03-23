@@ -1,0 +1,33 @@
+﻿@model Movie
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+     
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/moviename.js"></script>
+</head>
+<body>
+    <div asp-validation-summary="All" class="text-danger">
+    </div>
+
+    <form asp-action="AddMovie" method="post" class="form-inline" id="movieForm">
+        <div class="form-group">
+            <label>Name:</label>&nbsp;
+            <input asp-for="Name" class="form-control"/>
+        </div>&nbsp;
+        <div class="form-group">
+            <label>Rating (1 - 5):</label>&nbsp;
+            <input type="text" asp-for="Rating"
+                    class="form-control" />
+        </div>&nbsp;
+        <button type="submit" class="btn btn-primary">
+            Submit
+        </button>
+    </form>
+</body>
+</html>
+
