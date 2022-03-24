@@ -24,7 +24,7 @@ namespace Week10.Models
 
         public string GetErrorMessage()
         {
-            return "Don't use your first name";
+            return "Do not use your first name";
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

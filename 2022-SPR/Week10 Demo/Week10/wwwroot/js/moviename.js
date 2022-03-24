@@ -1,12 +1,16 @@
-﻿$(function () {
+﻿
 
-    jQuery.validator.addMethod("moviefirstname",
+    $.validator.addMethod("moviefirstname",
         function (value, element, param) {
             if (value == '') return false;
             if (value == 'EvanH') return false;
             return true;
-        }, jQuery.validator.format('Client Side Validation'));
+        });
 
-    jQuery.validator.unobtrusive.adapters.addSingleVale("moviefirstname","name");
+    //$.validator.unobtrusive.adapters.add("moviefirstname","name");
 
-}(jQuery));
+$.validator.unobtrusive.adapters.add("moviefirstname", ["name"], function (options) {
+    options.rules["moviefirstname"] = options.params.name;
+    options.messages["moviefirstname"] = "Client Side Validation";
+});
+
