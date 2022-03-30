@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,8 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Week11.Models;
 
-namespace Week08
+namespace Week11
 {
     public class Startup
     {
@@ -26,6 +28,10 @@ namespace Week08
             // MUST BE CALLED before AddControllersWithViews
             services.AddMemoryCache();
             services.AddSession();
+
+            services.AddDbContext<BookstoreContext>(
+                opts => opts.UseSqlServer(Configuration.GetConnectionString("BookstoreContext"))
+                );
 
             services.AddControllersWithViews();
         }

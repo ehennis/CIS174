@@ -9,10 +9,24 @@
 5) Create BookstoreContext Class
 	I needed to get Microsoft.EntityFrameworkCore from NuGet
 	Notice the beginning of configuring and creating
+6) Create ISBN as Primary and require Title
+        [Key]
+        public string ISBN { get; set; }
+        [Required]
+        [StringLength(200)]
+        public string Title { get; set; }
+7) Can also set these in BookstoreContext OnModelCreating
+            modelBuilder.Entity<Book>().HasKey(b => b.ISBN);
+            modelBuilder.Entity<Book>().Property(b => b.Title).IsRequired().HasMaxLength(200);
 
-Create Models
-Create DB Context
-Create Default Config Changes
+== Create Data Migrations ==
+7) Install Microsoft.EntitiyFramework.Tools and MicrosoftEntityFramework.Sql
+8) Create DbContext in Startup.cs
+            services.AddDbContext<BookstoreContext>(
+                opts => opts.UseSqlServer(Configuration.GetConnectionString("BookstoreContext"))
+                );
+9) Create Initial Migration (I had to install Microsoft.EntityFrameworkCore.Tools)
+    Add-Migration Initial
+10) Update Database with initial migration
+    Update-Database
 
-
-Create Migrations

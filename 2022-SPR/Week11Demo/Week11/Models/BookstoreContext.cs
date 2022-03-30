@@ -9,6 +9,7 @@ namespace Week11.Models
 {
     public class BookstoreContext: DbContext
     {
+        //public BookstoreContext() : base() { }
         public BookstoreContext(DbContextOptions<BookstoreContext> options) : base(options) { }
 
         public DbSet<Book> Books { get; set; }
@@ -22,6 +23,13 @@ namespace Week11.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<Book>().HasKey(b => b.ISBN);
+            //modelBuilder.Entity<Book>().Property(b => b.Title).IsRequired().HasMaxLength(200);
+            modelBuilder.Entity<Book>().HasData(
+                new Book { ISBN = "8675309", Title = "Jenny" },
+                new Book { ISBN = "1548547298", Title = "The Hobbit" }
+                );
         }
 
     }
