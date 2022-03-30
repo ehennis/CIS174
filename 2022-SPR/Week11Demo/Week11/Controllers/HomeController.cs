@@ -85,6 +85,7 @@ namespace Week08.Controllers
         public IActionResult Bookstore()
         {
             Book bk = new Book();
+            bk.BookId = 1;
             bk.ISBN = "1";
             bk.Title = "First Book";
             return View(bk);
