@@ -57,7 +57,7 @@ namespace Week08
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Movie}/{id?}");
+                    pattern: "{controller=Home}/{action=Bookstore}/{id?}");
             });
         }
     }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Week08.Models;
 using Week09.Models;
 using Week10.Models;
+using Week11.Models;
 
 namespace Week08.Controllers
 {
@@ -79,6 +80,14 @@ namespace Week08.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Bookstore()
+        {
+            Book bk = new Book();
+            bk.BookId = 1;
+            bk.Title = "First Book";
+            return View(bk);
         }
     }
 }

@@ -1,61 +1,18 @@
-﻿Model Validation
-1) Create Model\Movie.cs
-2) Create Views\Home\Movie.cshtml
-    Notice 'asp-for' statements
-3) Add Movie(..) to HomeController
-        public IActionResult Movie()
-        {
-            return View();
-        }
-** Run /home/movie/ **
-3) Add AddMovie(..) to HomeController
-        [HttpPost]
-        public IActionResult AddMovie(Movie movie)
-        {
-            if (ModelState.IsValid)
-            {
-                return RedirectToAction("List", "Movie");
-            }
-            else
-            {
-                return View("Movie");
-            }
-        }
-4) Add Movie Model Annotations
-        [Required]
-        [StringLength(30)]
-        
-        [Range(1,5)]
-** Run /home/movie and submit **
-5) Add Custom Error Messages
-        [Required(ErrorMessage = "Please enter a name")]
-        
-        [Range(1,5, ErrorMessage = "Please enter a rating between 1 and 5")]
-** Run /home/movie and submit **
-6) Add Custom Validation to HomeController
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿EF Core
+== Create Models and Controllers ==
+1) Create Book.cs Class
+2) Create Author.cs Class
+3) Create Bookstore method on HomeController
+4) Create Movie.cshtml
+***** Run Web Site *****
+== Create Bookstore Database == 
+5) Create BookstoreContext Class
+	I needed to get Microsoft.EntityFrameworkCore from NuGet
+	Notice the beginning of configuring and creating
 
-            string key = nameof(Week10.Models.Movie.Name);
-            var vally = ModelState.GetValidationState(key);
-            if(vally == ModelValidationState.Valid)
-            {
-                if( movie.Name == "Evan")
-                {
-                    ModelState.AddModelError(key, "Don't use your first name, dummy.");
-                }
-            }
-7) Add Additional Validation Message to HomeController
-                ModelState.AddModelError("", "There are errors!");
-** Run /home/movie
-8) Add Field Level Validation to Movies.cshtml
-            <span asp-validation-for="Name" class="text-danger"></span>
+Create Models
+Create DB Context
+Create Default Config Changes
 
-****************************
-** Client Side Validation **
-****************************
-9) Add scripts to Movie.cshtml
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-** Run /home/movie and validate that we didn't call the server
-10) ?? Client Side Custom rules (moviename.js)
+
+Create Migrations
