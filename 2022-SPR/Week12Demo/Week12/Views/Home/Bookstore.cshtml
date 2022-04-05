@@ -1,0 +1,19 @@
+﻿@model Book
+@{
+    string message = "Welcome!";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+</head>
+<body>
+    <h1>@message</h1>
+    <p>Title: @Model.Title</p>
+    <p>ISBN: @Model.ISBN</p>
+
+    <br /><br />
+</body>
+</html>
