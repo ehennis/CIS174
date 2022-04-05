@@ -1,1 +1,16 @@
 ﻿Dependecy Injection
+1) Create \Repository\*
+2) Create \Service\*
+3) Add IBookService to HomeController constructor
+4) Create BookStore method in HomeController
+5) Add service and repository to Startup.cs
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IBookRepository, BookRepository>();
+=== Run Code ===
+6) Add xUnit Test Project (can use MSTest as well)
+7) Add Moq from NuGet
+8) Add Project reference
+9) Create HomeController Tests
+=== In Class Coding ===
+10) Create Service Tests
+11) Create Repository Tests

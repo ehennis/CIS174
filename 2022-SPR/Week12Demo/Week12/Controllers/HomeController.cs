@@ -8,16 +8,18 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Week11.Models;
+using Week12.Service;
+using Week12.Repository;
 
 namespace Week08.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IBookService _service;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IBookService service)
         {
-            _logger = logger;
+            _service = service;
         }
 
         public IActionResult Index()
@@ -33,10 +35,7 @@ namespace Week08.Controllers
 
         public IActionResult Bookstore()
         {
-            Book bk = new Book();
-            bk.BookId = 1;
-            bk.ISBN = "1";
-            bk.Title = "First Book";
+            Book bk = _service.GetBook();
             return View(bk);
         }
     }

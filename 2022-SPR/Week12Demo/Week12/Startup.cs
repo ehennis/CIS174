@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Week11.Models;
+using Week12.Repository;
+using Week12.Service;
 
 namespace Week11
 {
@@ -34,6 +36,9 @@ namespace Week11
                 );
 
             services.AddControllersWithViews();
+
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IBookService, BookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
