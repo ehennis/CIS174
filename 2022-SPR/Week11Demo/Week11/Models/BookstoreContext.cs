@@ -14,6 +14,8 @@ namespace Week11.Models
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Author> Authors { get; set; }
+        public DbSet<BookAuthor> BookAuthors { get; set; }
+        public DbSet<Genre> Genres { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,11 +26,41 @@ namespace Week11.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<Book>().HasKey(b => b.ISBN);
-            //modelBuilder.Entity<Book>().Property(b => b.Title).IsRequired().HasMaxLength(200);
+            //Composite Key
+            modelBuilder.Entity<BookAuthor>().HasKey(ba => new { ba.BookId, ba.AuthorId });
+            //Foreign Key
+            modelBuilder.Entity<BookAuthor>().HasOne(ba => ba.Book)
+                .WithMany(b => b.BookAuthors)
+                .HasForeignKey(ba => ba.BookId);
+            modelBuilder.Entity<BookAuthor>().HasOne(ba => ba.Author)
+                .WithMany(a => a.BookAuthors)
+                .HasForeignKey(ba => ba.AuthorId);
+
+            // Remove cascading deletes with Genre
+            modelBuilder.Entity<Book>().HasOne(b => b.Genre)
+                .WithMany(g => g.Books)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Seed Initial Data
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre { GenreId = "Pop", Name = "Pop" },
+                new Genre { GenreId = "History", Name = "History" },
+                new Genre { GenreId = "Novel", Name = "Novel" }
+                );
             modelBuilder.Entity<Book>().HasData(
-                new Book { ISBN = "8675309", Title = "Jenny" },
-                new Book { ISBN = "1548547298", Title = "The Hobbit" }
+                new Book { BookId = 1, ISBN = "8675309", Title = "Jenny", GenreId = "Pop", Price = 10.00 },
+                new Book { BookId = 2, ISBN = "1548547298", Title = "The Hobbit", GenreId = "History", Price = 20.00 },
+                new Book { BookId = 3, ISBN = "555", Title = "Harry Potter", GenreId = "Novel", Price = 9.57 }
+                );
+            modelBuilder.Entity<Author>().HasData(
+                new Author { AuthorId = 1, FirstName = "Michelle", LastName = "Alexander" },
+                new Author { AuthorId = 2, FirstName = "Tommy", LastName = "TuTone" },
+                new Author { AuthorId = 3, FirstName = "Seth", LastName = "Grahame-Smith" }
+                );
+            modelBuilder.Entity<BookAuthor>().HasData(
+                new BookAuthor { BookId = 1, AuthorId = 2 },
+                new BookAuthor { BookId = 2, AuthorId = 1 },
+                new BookAuthor { BookId = 3, AuthorId = 3}
                 );
         }
 

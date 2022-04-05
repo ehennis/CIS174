@@ -30,3 +30,19 @@
 10) Update Database with initial migration
     Update-Database
 
+== Create Relationships (By Convention)==
+11) Create Genre.cs Model
+12) Add link to Book
+        public int GenreId { get; set; }
+        public Genre Genre { get; set; }
+13) Create AuthorBio.cs
+14) Add Author Bio link in Author Model
+        public AuthorBio Bio { get; set; }
+== Create the rest of the Database ==
+15) Create BookAuthor.cs
+16) Create AuthorBio.cs
+17) Update BookstoreContext with data seeding
+18) Update Database
+    Add-Migration MoreClasses
+    Update-Database MoreClasses
+

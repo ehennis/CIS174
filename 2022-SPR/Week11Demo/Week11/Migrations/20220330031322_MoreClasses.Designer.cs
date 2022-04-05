@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Week11.Models;
 
 namespace Week11.Migrations
 {
     [DbContext(typeof(BookstoreContext))]
-    partial class BookstoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220330031322_MoreClasses")]
+    partial class MoreClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
