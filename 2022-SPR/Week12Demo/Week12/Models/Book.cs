@@ -21,6 +21,6 @@ namespace Week11.Models
         public string GenreId { get; set; }
         public Genre Genre { get; set; }
 
-        public ICollection<BookAuthor> BookAuthors { get; set; }
+        public ICollection<Author> Authors { get; set; }
     }
 }

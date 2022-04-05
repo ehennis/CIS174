@@ -16,7 +16,5 @@ namespace Week11.Models
         public string LastName { get; set; }
 
         public string FullName { get { return $"{FirstName} {LastName}"; } }
-
-        public ICollection<BookAuthor> BookAuthors { get; set; }
     }
 }
