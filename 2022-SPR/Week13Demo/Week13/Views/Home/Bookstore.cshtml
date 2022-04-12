@@ -1,0 +1,48 @@
+﻿@model Book
+@{
+    string message = "Welcome!";
+}
+@addTagHelper Week13.TagHelpers.ButtonTagHelper, Week13
+@addTagHelper Week13.TagHelpers.LabelTagHelper, Week13
+@addTagHelper Week13.TagHelpers.MyLabelTagHelper, Week13
+@addTagHelper Week13.TagHelpers.FormLabelTagHelper, Week13
+@addTagHelper Week13.Components.BookBadgeViewComponent, Week13  //This should work but it doesn't
+@addTagHelper *, Week13
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/dev.css" />
+    </environment>
+</head>
+<body>
+    <h1>@message</h1>
+    <p>Title: @Model.Title</p>
+    <p>ISBN: @Model.ISBN</p>
+
+    <br /><br />
+    <form asp-action="Edit" method="post">
+        <input asp-for="Title" class="form-control" />
+        <br />
+        <button class="buttonDevelopment">Submit</button>
+        <br />
+        <label>General Label</label>
+        <br />
+        <label asp-for="Title">Asp For Title</label>
+        <br />
+        <br />
+        <partial name="PartialBookView" />
+        <br />
+        <br />
+        <vc:book-badge></vc:book-badge>
+        <br />
+        <br />
+        <div>
+            @await Component.InvokeAsync("BookBadge")
+        </div>
+    </form>
+</body>
+</html>

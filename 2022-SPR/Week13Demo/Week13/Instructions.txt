@@ -1,0 +1,59 @@
+﻿Tag Helpers
+1) asp-for: Bookstore.cshtml
+    <form>
+        <input asp-for="Title" class="form-control" />
+    </form>
+== Run code and inspect element for validation ==
+2) asp-action: Bookstore.cshtml
+    <form asp-action="Edit" method="post">
+== Run code and inspect element for action location
+**TAGNENT: Create Staging environment**
+    Create the environment by right clicking on the project and copying the existing project but change 'ASPNETCORE_ENVIRONMENT' to staging
+3) environment: Create dev.css and include for the ONLY the development environment
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/dev.css" />
+    </environment>
+4) Create ButtonTagHelper for setting custom classes
+5) Tag Helpers: Add TagHelpers to Bookstore.cshtml (For global add to _ViewImports.cshtml)
+@addTagHelper Week13.TagHelpers.ButtonTagHelper, Week13
+== Run code and inspect elements ==
+6) Tag Helper Types in TagHelperDisco.cs
+    6.1) LabelTagHelper for ALL labels
+    6.2) MyLabelTagHelper for ALL labels with Attribute
+    6.3) FormLabelTagHelper for asp-for 
+    6.4) Add @addTagHelper
+@addTagHelper Week13.TagHelpers.LabelTagHelper, Week13
+@addTagHelper Week13.TagHelpers.MyLabelTagHelper, Week13
+@addTagHelper Week13.TagHelpers.FormLabelTagHelper, Week13
+    6.5) Add Labels
+              <label>General Label</label>
+              <br />
+              <label asp-for="Title">Asp For Title</label>
+              <br />
+
+Partial Views
+7) Create Partial view by adding new view to "Views\Shared" and checking 'Create as partial view'
+    Right Click on 'Shared' -> Add View -> Check 'Create as a partial view'
+8) Add include in Bookstore.cshtml
+        <partial name="PartialBookView" />
+
+View Component
+9) Create folder 'Components'
+10) Create BookBadgeViewComponent.cs
+11) Add junk code to Startup.cs
+            // Fake code for demo!
+            services.AddScoped<IBook, Book>(sp =>
+               {
+                   return new Book() { ISBN = "50", Title = "Dependency Injected!" };
+
+               });
+12) Create Views\Shared\Components\BookBadge\Default.cshtml
+13) Add code to Bookstore.cshtml to reference the view component
+        <div>
+            @await Component.InvokeAsync("BookBadge")
+        </div>
+14) To Use Tag Helpers add to the top
+@addTagHelper Week13.Components.BookBadgeViewComponent, Week13  //This should work but it doesn't
+@addTagHelper *, Week13
+15) To use <vc> add the tag in the html
+        <vc:book-badge></vc:book-badge>
