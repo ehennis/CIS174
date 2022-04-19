@@ -1,0 +1,24 @@
+﻿@{
+    string message = "Welcome!";
+    if (ViewBag.CustomerName != null)
+    {
+        message = "Welcome Back!";
+    }
+
+    int num = Context.Session.GetInt32("num").Value;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+</head>
+<body>
+    <h1>@message</h1>
+    <p>Customer Name: @ViewBag.CustomerName</p>
+    <div>Code Block: @num</div>
+    <div>Expression: @Context.Session.GetInt32("num")</div>
+</body>
+</html>
