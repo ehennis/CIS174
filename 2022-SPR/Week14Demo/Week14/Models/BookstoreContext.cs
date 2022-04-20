@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Week14.Models;
 
 namespace Week11.Models
 {
-    public class BookstoreContext: DbContext
+    public class BookstoreContext: IdentityDbContext<User> // DbContext
     {
         //public BookstoreContext() : base() { }
         public BookstoreContext(DbContextOptions<BookstoreContext> options) : base(options) { }

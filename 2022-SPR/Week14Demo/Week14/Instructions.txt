@@ -1,1 +1,68 @@
 ﻿Authentication and Authorization
+1) Install Microsoft.AspNetCore.Identity.EntityFrameworkCore
+    (I had to install 5.0.15 since *.16 didn't match)
+
+2) Create Models\User class
+3) Add IdentityDbContext<User> to BookstoreContext
+    public class BookstoreContext: IdentityDbContext<User>
+4) Create Migration for new tables
+    Add-Migration AddIdentityTables
+5) Update Database
+    Update-Database
+=== Look at all the AspNet* tables ===
+6) Add Identity service to Startup.cs
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<BookstoreContext>()
+                .AddDefaultTokenProviders();
+7) Add Identity service to Startup.cs WITH Options
+            services.AddIdentity<User, IdentityRole>(options =>
+           {
+               options.Password.RequiredLength = 6;
+               options.Password.RequireNonAlphanumeric = false;
+               options.Password.RequireDigit = false;
+           })
+                .AddEntityFrameworkStores<BookstoreContext>()
+                .AddDefaultTokenProviders();
+8) Add Authentication and Authorization to Startup.cs
+            app.UseAuthorization();
+            app.UseAuthentication();
+9) Add Login Button Code to _Layout.cshtml
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <!-- Login buttons and links -->
+                @using Microsoft.AspNetCore.Identity
+                @using Week14.Models;
+                @inject SignInManager<User> signInManager
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            // signed-in user - Log Out button and username
+                        <li class="nav-item">
+                            
+                            <form method="post" asp-action="LogOut" asp-controller="Account" asp-area="">
+                                <input type="submit" value="Log Out"/>
+                                <span class="text-light">@User.Identity.Name</span>
+                            </form>
+                        </li>
+                        }
+                        else
+                        {
+                            // anonymous user - Register link and Log In button
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">&nbsp;Log In</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+10) Create Models\ViewModel.cs
+11) Create Models\LoginViewModel.cs
+12) Create Controller\AccountController.cs
+13) Create Views\Account\AccessDenied.cshtml, Login.cshtml, Register.cshtml
+== Run and create user ==
+14) Add [Authorize] to SecureController
+	using Microsoft.AspNetCore.Authorization;
+15) Add [AllowAnonymous] to SecureController.Evan
+
+

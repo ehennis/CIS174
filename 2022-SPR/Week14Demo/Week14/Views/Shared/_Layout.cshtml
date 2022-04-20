@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Week10</title>
+    <title>@ViewData["Title"] - Week14</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -11,7 +11,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Week10</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Week14</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,6 +24,38 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Secure" asp-action="Index">Secure</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <!-- Login buttons and links -->
+                @using Microsoft.AspNetCore.Identity
+                @using Week14.Models;
+                @inject SignInManager<User> signInManager
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            // signed-in user - Log Out button and username
+                        <li class="nav-item">
+                            
+                            <form method="post" asp-action="LogOut" asp-controller="Account" asp-area="">
+                                <input type="submit" value="Log Out"/>
+                                <span class="text-light">@User.Identity.Name</span>
+                            </form>
+                        </li>
+                        }
+                        else
+                        {
+                            // anonymous user - Register link and Log In button
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">&nbsp;Log In</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -37,7 +69,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Week10 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - Week14 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

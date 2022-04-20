@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using Week11.Models;
 using Week12.Repository;
 using Week12.Service;
 using Week13.Models;
+using Week14.Models;
 
 namespace Week11
 {
@@ -46,6 +48,20 @@ namespace Week11
                    return new Book() { ISBN = "50", Title = "Dependency Injected!" };
 
                });
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<BookstoreContext>()
+                .AddDefaultTokenProviders();
+
+            // Configure Password Options
+            //services.AddIdentity<User, IdentityRole>(options =>
+            //{
+            //   options.Password.RequiredLength = 6;
+            //   options.Password.RequireNonAlphanumeric = false;
+            //   options.Password.RequireDigit = false;
+            //})
+            //    .AddEntityFrameworkStores<BookstoreContext>()
+            //    .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,13 +85,15 @@ namespace Week11
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Bookstore}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}");
+                    //pattern: "{controller=Secure}/{action=Index}");
             });
         }
     }

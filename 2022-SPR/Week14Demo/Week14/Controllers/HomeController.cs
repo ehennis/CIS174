@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Week11.Models;
 using Week12.Service;
 using Week12.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Week08.Controllers
 {
@@ -32,11 +33,10 @@ namespace Week08.Controllers
             return View();
         }
 
-
-        public IActionResult Bookstore()
+        [Authorize]
+        public IActionResult Home()
         {
-            Book bk = _service.GetBook();
-            return View(bk);
+            return RedirectToAction("Index","Home");
         }
     }
 }
