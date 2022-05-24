@@ -1,0 +1,179 @@
+﻿1) Create application
+2) Delete files
+	Controllers, views, and Models folder contents
+3) Add 'HomeController' to Controllers folder
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+        public IActionResult Index()
+        {
+            ViewBag.Name = "Evan";
+            ViewBag.FV = 999.99;
+            return View();
+        }
+4) Add Razor View 'Index'
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Future Value Calculator</h1>
+    <p>Customer Name: @ViewBag.Name</p>
+    <p>Future Value: @ViewBag.FV.ToString("C2")</p>
+</body>
+</html>
+5) Configure Startup.cs
+ConfigureServices => services.AddControllersWithViews();
+6) Run
+7) Error Handling
+Change: HomeController.Index() => ViewBagS.FV
+8) Add Model 'FutureValueModel'
+   public class FutureValueModel
+    {
+        public decimal MonthlyInvestment { get; set; }
+        public decimal YearlyInterestRate { get; set; }
+        public int Years { get; set; }
+        public decimal CalculateFutureValue()
+        {
+            int months = Years * 12;
+            decimal monthlyInterestRate = YearlyInterestRate / 12 / 100;
+            decimal futureValue = 0;
+            for(int i = 0; i < months; i++)
+            {
+                futureValue = (futureValue + MonthlyInvestment) *
+                    (1 + monthlyInterestRate);
+            }
+            return futureValue;
+        }
+    }
+9) Add Razor View Import
+@using WebApplication2.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+10) Strongly Typed Views
+@model FutureValueModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home Page</title>
+    <style>
+        body {
+            padding: 1em;
+            font-family: Arial, Arial, Helvetica, sans-serif;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: navy;
+        }
+
+        label {
+            display: inline-block;
+            width: 10em;
+            padding-right: 1em;
+        }
+
+        div {
+            margin-bottom: .5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Future Value Calculator</h1>
+    <form asp-action="Index" method="post">
+        <div>
+            <label asp-for="MonthlyInvestment">Monthly Investment:</label>
+            <input asp-for="MonthlyInvestment" />
+        </div>
+        <div>
+            <label asp-for="YearlyInterestRate">Yearly Interest Rates:</label>
+            <input asp-for="YearlyInterestRate" />
+        </div>
+        <div>
+            <label asp-for="Years">Number of Years:</label>
+            <input asp-for="Years" />
+        </div>
+        <div>
+            <label>Future Value:</label>
+            <input value="@ViewBag.FV.ToString("C2")" readonly />
+        </div>
+        <button type="submit">Calculate</button>
+        <a asp-action="Index">Clear</a>
+    </form>
+</body>
+</html>
+11) Handle GET/POST Requests
+        [HttpGet]
+        public IActionResult Index()
+        {
+            ViewBag.FV = 0;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Index(FutureValueModel model)
+        {
+            ViewBag.FV = model.CalculateFutureValue();
+            return View(model);
+        }
+[Skipping]: CSS files, Razor Layout
+12) Validating User Input
+FutureValueMode:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+namespace CIS174.Models
+{
+    public class FutureValueModel
+    {
+        [Required(ErrorMessage = "Please enter a montly investement.")]
+        [Range(1,500, ErrorMessage = "Montly Investment amount must be between 1 and 500.")]
+        public decimal? MonthlyInvestment { get; set; }
+        [Required(ErrorMessage = "Please enter a yearly interest rate.")]
+        [Range(0.1,10.0, ErrorMessage = "Yearly interest rate must be between 0.1 and 10.0.")]
+        public decimal? YearlyInterestRate { get; set; }
+        [Required(ErrorMessage = "Please enter a number of years")]
+        [Range(1,50, ErrorMessage = "Number of years must be between 1 and 50.")]
+        public int? Years { get; set; }
+        public decimal? CalculateFutureValue()
+        {
+            int months = Years.Value * 12;
+            decimal monthlyInterestRate = YearlyInterestRate.Value / 12 / 100;
+            decimal futureValue = 0;
+            for(int i = 0; i < months; i++)
+            {
+                futureValue = (futureValue + MonthlyInvestment.Value) *
+                    (1 + monthlyInterestRate);
+            }
+            return futureValue;
+        }
+    }
+}
+
+HomeController:
+[HttpPost]
+        public IActionResult Index(FutureValueModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ViewBag.FV = model.CalculateFutureValue();
+            }
+            else
+            {
+                ViewBag.FV = 0;
+            }            
+            return View(model);
+        }
+Index.cshtml: <form> => <div asp-validation-summary="All"></div>
