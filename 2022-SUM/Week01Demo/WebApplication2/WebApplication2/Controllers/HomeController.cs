@@ -18,29 +18,9 @@ namespace CIS174.Controllers
             _logger = logger;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-        [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.FV = 0;
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult Index(FutureValueModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                ViewBag.FV = model.CalculateFutureValue();
-            }
-            else
-            {
-                ViewBag.FV = 0;
-            }
-            return View(model);
         }
 
         public IActionResult Privacy()
