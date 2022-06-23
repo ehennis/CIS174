@@ -6,8 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add DbContext
 builder.Services.AddDbContext<LibraryContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryContext")));
+
+// Add Libraries
 builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
 
 var app = builder.Build();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RoutingPractice.Controllers
+namespace CIS174Library.Controllers
 {
     [Route("Custom/[controller]/[action]")]
     public class OtherController : Controller
