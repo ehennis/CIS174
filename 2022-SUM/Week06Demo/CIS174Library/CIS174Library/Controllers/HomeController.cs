@@ -21,6 +21,8 @@ namespace CIS174Library.Controllers
         {
             ViewBag.Name = "Student";
 
+            ViewData["ViewDataProperty"] = "View Data Works!";
+
             List<Book> books = libraryRepository.GetAllBooks();
             return View(books);
         }
@@ -28,6 +30,11 @@ namespace CIS174Library.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult OtherPrivacy()
+        {
+            return View("Privacy");
         }
 
 

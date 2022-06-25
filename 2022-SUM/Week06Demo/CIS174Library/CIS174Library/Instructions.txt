@@ -1,68 +1,202 @@
 ﻿**********
-*Module 5*
+*Module 6*
 **********
-1) Show Program.cs
-    builder.Services.AddControllersWithViews();
 
-    app.UseRouting();
+**Razor Syntax
+1) Inline syntax
+    Index.cshtml
+    <h1 class="display-4">Welcome @ViewBag.Name</h1>
 
-    app.MapControllerRoute(
-        name: "Static",
-        pattern: "{controller=Home}/{action}/Page/{num}");
+2) Block syntax (Conditional)
+    Index.cshtml
+    @if (ViewBag.Name == "Student")
+            {
+                <p>Hello, Student</p>
+            }
 
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-2) Show URL with Action
-	Home/Index
-	Home/Privacy
-3) Show URL with Action and Id
-	Home/Display/10
-        public IActionResult Display(string id)
-        {
-            int cnt = Convert.ToInt32(id);
-            return View(cnt);
+3) Block syntax (Loop)
+        @foreach (var book in Model) {
+        <tr>
+            <td>@book.Name</td>
+            <td>@book.Year</td>            
+            <td>
+                <a asp-controller="Library" asp-action="Edit"
+                   asp-route-id="@book.BookId"
+                   class="btn btn-primary">Edit</a>
+                <a asp-controller="Library" asp-action="Delete"
+                   asp-route-id="@book.BookId"
+                   class="btn btn-primary">Delete</a>
+            </td>
+        </tr>
         }
-4) Multiple Routes (and Static Content)
-	Home/StaticContent/Page/1
-	Program.cs =>
-        app.MapControllerRoute(
-            name: "Static",
-            pattern: "{controller=Home}/{action}/Page/{num}");
-	HomeController.cs =>
-        public IActionResult StaticContent(string num)
+
+4) Razor Project Setup
+    \Controllers
+        *Controller
+    \Views
+        \Controller Name
+            *Views (Must match action name or name specified)
+
+5) Displaying Razor Views using View() [https://localhost:7028/Home/Privacy]
+    HomeController.cs
+        public IActionResult Privacy()
         {
-            return Content($"Static Content: {num}");
+            return View();
         }
-5) Route Attributes
-	HomeController.cs
-        [Route("/")]
-        public IActionResult IndexOverride()
+
+6) Displaying Razor Views using View(name) [https://localhost:7028/Home/OtherPrivacy]
+    HomeController.cs
+        public IActionResult OtherPrivacy()
         {
-            return Content("Index Override!");
+            return View("Privacy");
         }
-6) Controller Route Attributes
-    Create OtherController.cs
-    /Custom/Other/Index
-7) Areas (Show Chapter7 Guitar App)
-8) Navigation Menu
-    _Layout.cshtml
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CIS174Library</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+7) _ViewStart.cshtml sets the layout
+8) _Layout.cshtml sets the default layout
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+9) _ViewImports.cshtml sets all the global layouts
+
+10) asp-controller, asp-action, and asp-route-param_name
+    Delete.cshtml
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="BookId" />
+
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+
+11) Create data model (\Models\Book.cs)
+
+12) Pass a model to a view
+    LibraryController.cs
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            var movie = this.libraryRepository.Find(id);
+            return View(movie);
+        }
+
+13) Import Book's namespace
+    _ViewImports.cshtml
+        @using CIS174Library.Models
+14) Bind Book model to the Edit view
+    Edit.cshtml
+        @model Book
+
+15) Reference model properties
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Year">Year</label>
+            <input asp-for="Year" class="form-control">
+        </div>
+
+        <input type="hidden" asp-for="BookId" />
+
+        <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+
+**********
+*Module 7*
+**********
+
+16) IActionResult RedirectToAction
+    LibraryController.cs
+        [HttpPost]
+        public IActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                if (book.BookId == 0)
+                {
+                    this.libraryRepository.InsertBook(book);
+                }
+                else
+                {
+                    this.libraryRepository.UpdateBook(book);
+                }
+                this.libraryRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+                return View(book);
+            }
+        }
+
+17) ViewData
+    HomeController -> Index
+            ViewData["ViewDataProperty"] = "View Data Works!";
+    Index.cshtml
+            <h2>@ViewData["ViewDataProperty"]</h2>
+
+18) ViewBag
+    HomeController -> Index
+            ViewBag.Name = "Student";
+    Index.cshtml
+            <h1 class="display-4">Welcome @ViewBag.Name</h1>
+            
+19) Transfer Data between View and Controller (HttpGet -> View -> HttpPost -> Redirect)
+    LibraryController.cs
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            var movie = this.libraryRepository.Find(id);
+            return View(movie);
+        }
+    Edit.cshtml
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control">
             </div>
-        </nav>
+
+            <div class="form-group">
+                <label asp-for="Year">Year</label>
+                <input asp-for="Year" class="form-control">
+            </div>
+
+            <input type="hidden" asp-for="BookId" />
+
+            <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    LibraryController.cs
+        [HttpPost]
+        public IActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                if (book.BookId == 0)
+                {
+                    this.libraryRepository.InsertBook(book);
+                }
+                else
+                {
+                    this.libraryRepository.UpdateBook(book);
+                }
+                this.libraryRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+                return View(book);
+            }
+        }
