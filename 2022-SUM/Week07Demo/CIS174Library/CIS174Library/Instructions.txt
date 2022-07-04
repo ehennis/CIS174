@@ -1,0 +1,114 @@
+﻿**********
+*Module 8*
+**********
+
+**Session State
+1) Add ConfigureServices Methods
+        // MUST BE CALLED before AddControllersWithViews
+        builder.Services.AddMemoryCache();
+        builder.Services.AddSession();
+2) Add Configure Methods
+            // MUST BE CALLED before UseEndpoints
+            app.UseSession();
+
+3) Create SessionController.cs
+4) Add Session code to Index()
+            int num = HttpContext.Session.GetInt32("num") ?? 0;
+            num += 1;
+            HttpContext.Session.SetInt32("num", num);
+
+5) Create Views\Session\Index.cshtml
+    <h1 class="display-4">Session Count: @Context.Session.GetInt32("num")</h1>
+
+6) Run https://localhost:7028/Session/Index
+
+
+**Cookies
+7) Append Cookie in SessionController (Index)
+            var options = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+            Response.Cookies.Append("username", "evan", options);
+
+8) Get Cookie in SessionController (Cookie)
+            var usrname = Request.Cookies["username"];
+            ViewBag.UserName = usrname;
+
+9) Display Cookie in Cookie.cshtml
+    <p>User Name: @ViewBag.UserName</p>
+
+10) Run https://localhost:7028/Session/Cookie
+
+11) Layout Additions: Added Session and Cookie to _Layout.cshtml
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="Index">Session</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="Cookie">Cookie</a>
+    </li>
+
+**********
+*Module 9*
+**********
+
+**Model Binding
+12) Create a link in Home\Index.cshtml to call LibraryController\Edit (Note: link passes in an ID)
+                <a asp-controller="Library" asp-action="Edit"
+                   asp-route-id="@book.BookId"
+                   class="btn btn-primary">Edit</a>
+
+13) Create HttpGet Edit method in LibraryController.cs
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            var movie = this.libraryRepository.Find(id);
+            return View(movie);
+        }
+
+14) Create Library\Edit.cshtml to display the model data (Note: Model binding)
+
+
+15) Create <form> in Library\Edit.cshtml
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Year">Year</label>
+            <input asp-for="Year" class="form-control">
+        </div>
+
+        <input type="hidden" asp-for="BookId" />
+
+        <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+
+16) Create HttpPost Edit method in LibraryController.cs
+        [HttpPost]
+        public IActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                if (book.BookId == 0)
+                {
+                    this.libraryRepository.InsertBook(book);
+                }
+                else
+                {
+                    this.libraryRepository.UpdateBook(book);
+                }
+                this.libraryRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+                return View(book);
+            }
+        }
+
+17) Run web site -> Edit button -> View Edit.cshtml -> Save -> View Home\Index
