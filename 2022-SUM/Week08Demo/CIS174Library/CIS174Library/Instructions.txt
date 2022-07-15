@@ -173,3 +173,6 @@
     Update-Database
 
 ** NOTE: We will need to update all of the views to handle the new authors
+
+29) Scaffold Database
+    Scaffold-DbContext "Name=ConnectionStrings:LibraryContext" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\Scaffold

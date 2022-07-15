@@ -3,3 +3,5 @@ To Fix:
 	Go through assignments and fix their wording so we are not having them create a massive project.
 	Add chapters covered to slides
 	Add chapters to read to slides
+	For summer semesters, move the project stuff up earlier
+	Maybe move the database work up earlier (??)
