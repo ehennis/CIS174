@@ -1,0 +1,167 @@
+﻿***********
+*Module 12*
+***********
+1) Create \Repository\*
+2) Add ILibraryRepository to HomeController constructor
+3) Add service and repository to Startup.cs
+	builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
+
+=== Run Code ===
+4) Add MSTest Test Project (can use xUnit as well)
+5) Add Moq from NuGet
+6) Add Project reference
+7) Create HomeController Tests
+=== In Class Coding ===
+8) Create Service Tests
+9) Create Repository Tests
+10) Create Math class
+11) Test Math class with [DataRow]
+
+***********
+*Module 13*
+***********
+Tag Helpers
+12) asp-for: Library\Edit.cshtml
+    <form>
+        <input asp-for="Name" class="form-control">
+    </form>
+== Run code and inspect element for validation ==
+13) asp-action: Library\Edit.cshtml
+    <form asp-action="Edit" method="post">
+== Run code and inspect element for action location
+**TAGNENT: Create Staging environment**
+    Create the environment by right clicking on the project and copying the existing project but change 'ASPNETCORE_ENVIRONMENT' to staging
+14) environment: Create dev.css and include for the ONLY the development environment in Shared\_Layout.cshtml
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/dev.css" />
+    </environment>
+15) Add button to Home\Index.cshtml
+    <input type="button" class="buttonDevelopment" value="Development Button" />
+16) Create TagHelpers\ButtonTagHelper for setting custom classes
+17) Tag Helpers: Add TagHelpers to Library\Edit.cshtml (For global add to _ViewImports.cshtml)
+    @addTagHelper CIS174Library.TagHelpers.ButtonTagHelper, CIS174Library
+18) Add <button /> to Home\Index.cshtml
+    <button>Test Button</button>
+== Run code and inspect elements ==
+19) Tag Helper Types in TagHelperDisco.cs
+    19.1) LabelTagHelper for ALL labels
+    19.2) MyLabelTagHelper for ALL labels with Attribute
+    19.3) FormLabelTagHelper for asp-for 
+    19.4) Add @addTagHelper
+@addTagHelper Week13.TagHelpers.LabelTagHelper, Week13
+@addTagHelper Week13.TagHelpers.MyLabelTagHelper, Week13
+@addTagHelper Week13.TagHelpers.FormLabelTagHelper, Week13
+    19.5) Add Labels
+              <label>General Label</label>
+              <br />
+              <label asp-for="Title">Asp For Title</label>
+              <br />
+
+Partial Views
+20) Create Partial view by adding new view to "Views\Shared" and checking 'Create as partial view'
+    Right Click on 'Shared' -> Add View -> Check 'Create as a partial view'
+21) Add include in Library\Edit.cshtml
+        <partial name="PartialBookView" />
+
+View Component
+22) Create folder 'Components'
+23) Create BookBadgeViewComponent.cs
+24) Add junk code to Startup.cs
+    // Fake code for demo!
+    builder.Services.AddScoped<IBook, Book>(sp =>
+    {
+        return new Book() { BookId = 50, Name = "Dependency Injected!", Year = 2022 };
+
+    });
+
+25) Create Views\Shared\Components\BookBadge\Default.cshtml
+26) Add code to Libary\Edit.cshtml to reference the view component
+        <div>
+            @await Component.InvokeAsync("BookBadge")
+        </div>
+
+27) To Use Tag Helpers add to the top
+@addTagHelper CIS174Library.Components.BookBadgeViewComponent, CIS174Library  //This should work but it doesn't
+@addTagHelper *, Week13
+28) To use <vc> add the tag in the html
+        <vc:book-badge></vc:book-badge>
+
+
+***********
+*Module 14*
+***********
+Authentication and Authorization
+29) Install Microsoft.AspNetCore.Identity.EntityFrameworkCore
+    (I had to install 6.0.5 since *.7 didn't match)
+
+30) Create Models\User class
+31) Add IdentityDbContext<User> to LibraryContext
+    public class LibraryContext: IdentityDbContext<User>
+32) Create Migration for new tables
+    Add-Migration AddIdentityTables
+33) Update Database
+    Update-Database
+=== Look at all the AspNet* tables ===
+34) Add Identity service to Program.cs
+    builder.Services.AddIdentity<User, IdentityRole>()
+        .AddEntityFrameworkStores<LibraryContext>()
+        .AddDefaultTokenProviders();
+35) Add Identity service to Program.cs WITH Options
+    builder.Services.AddIdentity<User, IdentityRole>(options =>
+    {
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireDigit = false;
+    })
+        .AddEntityFrameworkStores<LibraryContext>()
+        .AddDefaultTokenProviders();
+36) Add Authentication and Authorization to Program.cs
+            app.UseAuthorization();
+            app.UseAuthentication();
+37) Add Login Button Code to _Layout.cshtml
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <!-- Login buttons and links -->
+                @using Microsoft.AspNetCore.Identity
+                @using CIS174Library.Models;
+                @inject SignInManager<User> signInManager
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            // signed-in user - Log Out button and username
+                        <li class="nav-item">
+                            
+                            <form method="post" asp-action="LogOut" asp-controller="Account" asp-area="">
+                                <input type="submit" value="Log Out"/>
+                                <span class="text-light">@User.Identity.Name</span>
+                            </form>
+                        </li>
+                        }
+                        else
+                        {
+                            // anonymous user - Register link and Log In button
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">&nbsp;Log In</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+38) Create Models\RegisterViewModel.cs
+39) Create Models\LoginViewModel.cs
+40) Create Controller\AccountController.cs
+41) Create Views\Account\AccessDenied.cshtml, Login.cshtml, Register.cshtml
+== Run and create user ==
+42) Add [Authorize] to SecureController
+	using Microsoft.AspNetCore.Authorization;
+43) Add [AllowAnonymous] to SecureController.Evan
+
+
+
+** Testing [Authorize] **
+var type = controller.GetType();
+var attrib = type.GetCustomAttributes(typeof(AuthorizeAttribute)), true);
+Assert.True(attrib.Any());
+
+

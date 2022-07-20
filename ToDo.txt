@@ -5,3 +5,4 @@ To Fix:
 	Add chapters to read to slides
 	For summer semesters, move the project stuff up earlier
 	Maybe move the database work up earlier (??)
+	Fix chapters in Syllabus
