@@ -11,19 +11,6 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/js/bookname.js"></script>
 
-<hr />
-Partial View:<br/>
-<partial name="PartialBookView" />
-<hr />
-Invoke:<br />
-<div>
-    @await Component.InvokeAsync("BookBadge")
-</div>
-<hr />
-VC: <br />
-    <vc:book-badge></vc:book-badge>
-<hr />
-
 <form asp-action="Edit" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
 

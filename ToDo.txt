@@ -6,3 +6,4 @@ To Fix:
 	For summer semesters, move the project stuff up earlier
 	Maybe move the database work up earlier (??)
 	Fix chapters in Syllabus
+	Reorder Columns based on date. Manage -> Column Organization
