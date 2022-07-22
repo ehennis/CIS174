@@ -29,7 +29,7 @@ builder.Services.AddScoped<IBook, Book>(sp =>
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 3;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireDigit = false;
 })
@@ -55,8 +55,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "Static",
