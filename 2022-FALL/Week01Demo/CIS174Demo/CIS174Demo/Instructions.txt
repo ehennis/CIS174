@@ -29,7 +29,7 @@
     <p>Future Value: @ViewBag.FV.ToString("C2")</p>
 </body>
 </html>
-5) Configure Startup.cs
+5) Configure Program.cs
 ConfigureServices => services.AddControllersWithViews();
 6) Run
 7) Error Handling
@@ -134,7 +134,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace CIS174.Models
+namespace CIS174Demo.Models
 {
     public class FutureValueModel
     {
