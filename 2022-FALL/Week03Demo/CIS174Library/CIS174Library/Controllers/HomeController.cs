@@ -9,19 +9,27 @@ namespace CIS174Library.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private ILibraryRepository libraryRepository;
+        private readonly LibraryContext _cntx;
 
-        public HomeController(ILogger<HomeController> logger, ILibraryRepository repo)
+        //private ILibraryRepository libraryRepository;
+
+        public HomeController(ILogger<HomeController> logger, LibraryContext cntx)
         {
             _logger = logger;
-            libraryRepository = repo;
+            _cntx = cntx;
         }
+        //public HomeController(ILogger<HomeController> logger, ILibraryRepository repo)
+        //{
+        //    _logger = logger;
+        //    libraryRepository = repo;
+        //}
 
         public IActionResult Index()
         {
             ViewBag.Name = "Student";
 
-            List<Book> books = libraryRepository.GetAllBooks();
+            List<Book> books = _cntx.Books.ToList();
+            //List<Book> books = libraryRepository.GetAllBooks();
             return View(books);
         }
 

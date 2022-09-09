@@ -29,7 +29,7 @@
 11) Add Micorosoft.EntityFrameworkCore.InMemory from NuGet
 12) Create 'LibraryRepositoryInMemoryTest.cs'
 13) Create InMemmory LibraryContext
-            var inmemory = new DbContextOptionsBuilder<MovieContext>()
+            var inmemory = new DbContextOptionsBuilder<LibraryContext>()
                 .UseInMemoryDatabase("Filename=test.db")
                 .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
