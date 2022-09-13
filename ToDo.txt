@@ -2,3 +2,5 @@ To Fix:
 	Go through assignments and fix their wording so we are not having them create a massive project.
 	For summer semesters, move the project stuff up earlier
 	Maybe move the database work up earlier (??)
+	Chapter 3 has unneeded bootstrap setup
+	Maybe move GitHub earlier and require that for all projects (???)
