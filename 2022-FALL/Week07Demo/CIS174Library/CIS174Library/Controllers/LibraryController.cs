@@ -30,29 +30,6 @@ namespace CIS174Library.Controllers
             return View(movie);
         }
 
-        [HttpPost]
-        public IActionResult Edit(Book book)
-        {
-            if (ModelState.IsValid)
-            {
-                if (book.BookId == 0)
-                {
-                    this.libraryRepository.InsertBook(book);
-                }
-                else
-                {
-                    this.libraryRepository.UpdateBook(book);
-                }
-                this.libraryRepository.Save();
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
-                return View(book);
-            }
-        }
-
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -67,6 +44,6 @@ namespace CIS174Library.Controllers
             //context.SaveChanges();
             this.libraryRepository.DeleteBook(book);
             return RedirectToAction("Index", "Home");
-        }
+        }        
     }
 }

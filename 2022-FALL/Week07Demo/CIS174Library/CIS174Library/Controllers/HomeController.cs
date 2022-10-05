@@ -19,10 +19,6 @@ namespace CIS174Library.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Name = "Student";
-
-            ViewData["ViewDataProperty"] = "View Data Works!";
-
             List<Book> books = libraryRepository.GetAllBooks();
             return View(books);
         }
