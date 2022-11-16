@@ -1,0 +1,79 @@
+﻿***********
+*Module 13*
+***********
+Tag Helpers
+12) asp-for: Library\Edit.cshtml
+    <form>
+        <input asp-for="Name" class="form-control">
+    </form>
+== Run code and inspect element for validation ==
+13) asp-action: Library\Edit.cshtml
+    <form asp-action="Edit" method="post">
+== Run code and inspect element for action location
+**TAGNENT: Create Staging environment**
+    Create the environment by right clicking on the project and copying the existing project but change 'ASPNETCORE_ENVIRONMENT' to staging
+14) environment: Create dev.css and include for the ONLY the development environment in Shared\_Layout.cshtml
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/dev.css" />
+    </environment>
+15) Add button to Home\Index.cshtml
+    <input type="button" class="buttonDevelopment" value="Development Button" />
+
+16) Create TagHelpers\ButtonTagHelper for setting custom classes
+17) Tag Helpers: Add TagHelpers to Library\Edit.cshtml (For global add to _ViewImports.cshtml)
+    @addTagHelper CIS174Library.TagHelpers.ButtonTagHelper, CIS174Library
+18) Add <button /> to Home\Index.cshtml
+    <button>Test Button</button>
+== Run code and inspect elements ==
+
+19) Tag Helper Types in TagHelperDisco.cs
+    19.1) LabelTagHelper for ALL labels
+    19.2) MyLabelTagHelper for ALL labels with Attribute
+    19.3) FormLabelTagHelper for asp-for 
+    19.4) Add @addTagHelper
+@addTagHelper CIS174Library.TagHelpers.LabelTagHelper, CIS174Library
+@addTagHelper CIS174Library.TagHelpers.MyLabelTagHelper, CIS174Library
+@addTagHelper CIS174Library.TagHelpers.FormLabelTagHelper, CIS174Library
+    19.5) Add Labels
+              <label>General Label</label>
+              <br />
+              <label asp-for="Title">Asp For Title</label>
+              <br />
+
+Partial Views
+20) Create Partial view by adding new view to "Views\Shared" and checking 'Create as partial view'
+    Right Click on 'Shared' -> Add View -> Check 'Create as a partial view'
+21) Add include in Library\Edit.cshtml
+    <hr />
+    Partial View:<br/>
+    <partial name="PartialBookView" />
+    <hr />
+
+View Component
+22) Create folder 'Components'
+23) Create BookBadgeViewComponent.cs
+24) Add junk code to Startup.cs
+    // Fake code for demo!
+    builder.Services.AddScoped<IBook, Book>(sp =>
+    {
+        return new Book() { BookId = 50, Name = "Dependency Injected!", Year = 2022 };
+
+    });
+
+25) Create Views\Shared\Components\BookBadge\Default.cshtml
+26) Add code to Libary\Edit.cshtml to reference the view component
+    <hr />
+    Invoke:<br />
+    <div>
+        @await Component.InvokeAsync("BookBadge")
+    </div>
+    <hr />
+
+27) To Use Tag Helpers add to the top
+@addTagHelper CIS174Library.Components.BookBadgeViewComponent, CIS174Library  //This should work but it doesn't
+@addTagHelper *, Week13
+28) To use <vc> add the tag in the html
+    <hr />
+    VC: <br />
+        <vc:book-badge></vc:book-badge>
+    <hr />
