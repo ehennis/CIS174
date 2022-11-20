@@ -10,8 +10,16 @@ Tag Helpers
 13) asp-action: Library\Edit.cshtml
     <form asp-action="Edit" method="post">
 == Run code and inspect element for action location
-**TAGNENT: Create Staging environment**
-    Create the environment by right clicking on the project and copying the existing project but change 'ASPNETCORE_ENVIRONMENT' to staging
+
+    *****************************************
+    *** TAGNENT: Create Staging environment**
+    *****************************************
+    1) Go to 'CIS174Library' in the top menu and select 'Debug Properties'
+    2) Select 'Duplicate Selected Profile' on CIS174Library
+    3) Rename it CIS174Staging
+    4) Under Environment variables change ASPNETCORE_ENVIRONMENT to 'Staging'
+    5) Explore Properties -> launchSettings.json    
+    
 14) environment: Create dev.css and include for the ONLY the development environment in Shared\_Layout.cshtml
     <environment include="Development">
         <link rel="stylesheet" href="~/css/dev.css" />
@@ -20,6 +28,7 @@ Tag Helpers
     <input type="button" class="buttonDevelopment" value="Development Button" />
 
 16) Create TagHelpers\ButtonTagHelper for setting custom classes
+    Remove the 'x' from the name
 17) Tag Helpers: Add TagHelpers to Library\Edit.cshtml (For global add to _ViewImports.cshtml)
     @addTagHelper CIS174Library.TagHelpers.ButtonTagHelper, CIS174Library
 18) Add <button /> to Home\Index.cshtml

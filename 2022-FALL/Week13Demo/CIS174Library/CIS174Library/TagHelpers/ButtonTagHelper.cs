@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CIS174Library.TagHelpers
 {
-    public class ButtonTagHelper : TagHelper
+    // Added an 'x' so that all buttons won't be blue
+    public class ButtonxTagHelper : TagHelper
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
