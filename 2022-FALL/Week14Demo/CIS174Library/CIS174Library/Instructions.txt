@@ -98,9 +98,9 @@ Authentication and Authorization
 15) Add static call to Program.cs
     await LibraryContext.CreateAdminUser(app.Services);
 == Run and create user ==
-14) Add [Authorize] to SecureController
+16) Add [Authorize] to SecureController
 	using Microsoft.AspNetCore.Authorization;
-15) Add [AllowAnonymous] to SecureController.Evan
+17) Add [AllowAnonymous] to SecureController.Evan
 
 
 
