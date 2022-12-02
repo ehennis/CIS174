@@ -4,7 +4,7 @@
 Authentication and Authorization
 1) Install Microsoft.AspNetCore.Identity.EntityFrameworkCore
     (I had to install 6.0.5 since *.7 didn't match)
-
+=== Run Update-Database to get base level database ===
 2) Create Models\User class
 3) Add IdentityDbContext<User> to LibraryContext
     public class LibraryContext: IdentityDbContext<User>
