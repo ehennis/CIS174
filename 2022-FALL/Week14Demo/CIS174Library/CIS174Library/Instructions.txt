@@ -64,6 +64,39 @@ Authentication and Authorization
 11) Create Models\LoginViewModel.cs
 12) Create Controller\AccountController.cs
 13) Create Views\Account\AccessDenied.cshtml, Login.cshtml, Register.cshtml
+14) Create LibraryContext static method to create the admin account and role
+
+        public static async Task CreateAdminUser(IServiceProvider serviceProvider)
+        {
+            using (var scoped = serviceProvider.CreateScope())
+            {
+                UserManager<User> userManager = scoped.ServiceProvider.GetRequiredService<UserManager<User>>();
+                RoleManager<IdentityRole> roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                string username = "admin";
+                string pwd = "admin";
+                string roleName = "Admin";
+
+                // if role doesn't exist, create it
+                if (await roleManager.FindByNameAsync(roleName) == null)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+
+                if (await userManager.FindByNameAsync(username) == null)
+                {
+                    User user = new User() { UserName = username };
+                    var result = await userManager.CreateAsync(user, pwd);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, roleName);
+                    }
+                }
+            }
+        }
+
+15) Add static call to Program.cs
+    await LibraryContext.CreateAdminUser(app.Services);
 == Run and create user ==
 14) Add [Authorize] to SecureController
 	using Microsoft.AspNetCore.Authorization;
@@ -72,8 +105,21 @@ Authentication and Authorization
 
 
 ** Testing [Authorize] **
-var type = controller.GetType();
-var attrib = type.GetCustomAttributes(typeof(AuthorizeAttribute)), true);
-Assert.True(attrib.Any());
+
+        [TestMethod]
+        public void CheckAuthorization()
+        {
+            SecureController controller = new SecureController();
+            var type = controller.GetType();
+            var attribute = type.GetCustomAttribute(typeof(AuthorizeAttribute));
+            Assert.IsNotNull(attribute);
+
+            var logger = new Mock<ILogger<HomeController>>();
+            var lrMock = new Mock<ILibraryRepository>();
+            HomeController home = new HomeController(logger.Object, lrMock.Object);
+            var ht = home.GetType();
+            var att = ht.GetCustomAttribute(typeof(AuthorizeAttribute));
+            Assert.IsNull(att);
+        }
 
 
