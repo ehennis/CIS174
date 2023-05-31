@@ -9,10 +9,12 @@ namespace CIS174Library.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly LibraryContext _cntx;
 
+        // Step 2
+        private readonly LibraryContext _cntx;
         //private ILibraryRepository libraryRepository;
 
+        // Step 2
         public HomeController(ILogger<HomeController> logger, LibraryContext cntx)
         {
             _logger = logger;
@@ -28,8 +30,10 @@ namespace CIS174Library.Controllers
         {
             ViewBag.Name = "Student";
 
+            // Step 2
             List<Book> books = _cntx.Books.ToList();
             //List<Book> books = libraryRepository.GetAllBooks();
+
             return View(books);
         }
 

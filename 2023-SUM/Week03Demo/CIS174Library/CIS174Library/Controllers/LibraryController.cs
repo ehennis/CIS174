@@ -1,4 +1,5 @@
-﻿using CIS174Library.Models;
+﻿using CIS174Library.Data;
+using CIS174Library.Models;
 using CIS174Library.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,14 +7,21 @@ namespace CIS174Library.Controllers
 {
     public class LibraryController : Controller
     {
-        private ILibraryRepository libraryRepository;
+        // Step 3
+        private LibraryContext context;
+        //private ILibraryRepository libraryRepository;
 
         //public MovieController(MovieContext ctx)
-        public LibraryController(ILibraryRepository repository)
+
+        public LibraryController(LibraryContext ctx)
         {
-            //context = ctx
-            this.libraryRepository = repository;
+            context = ctx;
         }
+        //public LibraryController(ILibraryRepository repository)
+        //{
+        //    //context = ctx
+        //    this.libraryRepository = repository;
+        //}
 
         [HttpGet]
         public IActionResult Add()
@@ -26,28 +34,65 @@ namespace CIS174Library.Controllers
         public IActionResult Edit(int id)
         {
             ViewBag.Action = "Edit";
-            var movie = this.libraryRepository.Find(id);
-            if( movie.BookId == 10)
+            // Step 3
+            var book = this.context.Books.Find(id);
+            //var book = this.libraryRepository.Find(id);
+            if (book.BookId == 10)
             {
-                movie.Year = -1;
+                book.Year = -1;
             }
-            return View(movie);
+            return View(book);
         }
 
+        //[HttpPost]
+        //public IActionResult Edit(Book book)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (book.BookId == 0)
+        //        {
+        //            // Step 3
+        //            this.context.Books.Add(book);
+        //            //this.libraryRepository.InsertBook(book);
+        //        }
+        //        else
+        //        {
+        //            // Step 3
+        //            this.context.Books.Update(book);
+        //            //this.libraryRepository.UpdateBook(book);
+        //        }
+        //        // Step 3
+        //        this.context.SaveChanges();
+        //        //this.libraryRepository.Save();
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+        //        return View(book);
+        //    }
+        //}
+
+        // Step 12
         [HttpPost]
         public IActionResult Edit(Book book)
         {
+            // Null Exception
+            book = null;
             if (ModelState.IsValid)
             {
                 if (book.BookId == 0)
                 {
-                    this.libraryRepository.InsertBook(book);
+                    this.context.Books.Add(book);
+                    //this.libraryRepository.InsertBook(book);
                 }
                 else
                 {
-                    this.libraryRepository.UpdateBook(book);
+                    this.context.Books.Update(book);
+                    //this.libraryRepository.UpdateBook(book);
                 }
-                this.libraryRepository.Save();
+                this.context.SaveChanges();
+                //this.libraryRepository.Save();
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -57,19 +102,23 @@ namespace CIS174Library.Controllers
             }
         }
 
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var movie = this.libraryRepository.Find(id);
-            return View(movie);
+            // Step 3
+            var book = this.context.Books.Find(id);
+            //var book = this.libraryRepository.Find(id);
+            return View(book);
         }
 
         [HttpPost]
         public IActionResult Delete(Book book)
         {
-            //context.Movies.Remove(movie);
-            //context.SaveChanges();
-            this.libraryRepository.DeleteBook(book);
+            // Step 3
+            context.Books.Remove(book);
+            context.SaveChanges();
+            //this.libraryRepository.DeleteBook(book);
             return RedirectToAction("Index", "Home");
         }
     }
