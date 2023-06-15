@@ -1,6 +1,11 @@
 To Fix:
-	Go through assignments and fix their wording so we are not having them create a massive project.
+	Go through assignments and fix their wording 
+		I think I want them to have a single assignment project with the menu items
 	For summer semesters, move the project stuff up earlier
 	Maybe move the database work up earlier (??)
 	Chapter 3 has unneeded bootstrap setup
-	Maybe move GitHub earlier and require that for all projects (???)
+	Week 6, add the route parameter stuff from page 269 that matches the homework
+	Week 9, add the other model binding examples.
+	Final: -20pts if Azure doesn't work
+	Final Rubrik: Remove April 27th line
+	Demo 3 needs to be updated. Copy from 2023-SUM
