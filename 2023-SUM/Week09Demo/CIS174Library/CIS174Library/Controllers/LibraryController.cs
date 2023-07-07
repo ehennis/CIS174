@@ -1,4 +1,5 @@
-﻿using CIS174Library.Models;
+﻿using CIS174Library.Data;
+using CIS174Library.Models;
 using CIS174Library.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,13 +7,14 @@ namespace CIS174Library.Controllers
 {
     public class LibraryController : Controller
     {
-        private ILibraryRepository libraryRepository;
+        private LibraryContext context;
+        //private ILibraryRepository libraryRepository;
 
-        //public MovieController(MovieContext ctx)
-        public LibraryController(ILibraryRepository repository)
+        public LibraryController(LibraryContext ctx)
+        //public LibraryController(ILibraryRepository repository)
         {
-            //context = ctx
-            this.libraryRepository = repository;
+            context = ctx;
+            //this.libraryRepository = repository;
         }
 
         [HttpGet]
@@ -26,7 +28,7 @@ namespace CIS174Library.Controllers
         public IActionResult Edit(int id)
         {
             ViewBag.Action = "Edit";
-            var movie = this.libraryRepository.Find(id);
+            var movie = this.context.Books.Find(id);// this.libraryRepository.Find(id);
             return View(movie);
         }
 
@@ -37,13 +39,16 @@ namespace CIS174Library.Controllers
             {
                 if (book.BookId == 0)
                 {
-                    this.libraryRepository.InsertBook(book);
+                    context.Books.Add(book);
+                    //this.libraryRepository.InsertBook(book);
                 }
                 else
                 {
-                    this.libraryRepository.UpdateBook(book);
+                    context.Books.Update(book);
+                    //this.libraryRepository.UpdateBook(book);
                 }
-                this.libraryRepository.Save();
+                context.SaveChanges();
+                //this.libraryRepository.Save();
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -56,16 +61,16 @@ namespace CIS174Library.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var movie = this.libraryRepository.Find(id);
+            var movie = context.Books.Find(id);// this.libraryRepository.Find(id);
             return View(movie);
         }
 
         [HttpPost]
         public IActionResult Delete(Book book)
         {
-            //context.Movies.Remove(movie);
-            //context.SaveChanges();
-            this.libraryRepository.DeleteBook(book);
+            context.Books.Remove(book);
+            context.SaveChanges();
+            //this.libraryRepository.DeleteBook(book);
             return RedirectToAction("Index", "Home");
         }
     }
