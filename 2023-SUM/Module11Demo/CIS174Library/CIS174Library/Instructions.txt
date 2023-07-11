@@ -1,0 +1,73 @@
+﻿***********
+*Module 11*
+***********
+
+**Delete all migrations and tables in the database
+
+1) Look at Model\Books.cs
+
+2) Look at Data\LibraryContext
+
+3) Look at the creation of the DbContext in Program.cs
+    // Add DbContext
+    builder.Services.AddDbContext<LibraryContext>(options => 
+        options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryContext")));
+
+4) Create initial migration
+    Add-Migration Initial
+
+5) Update database with latest migration (if you have multiple DbContext classes add -Context LibraryContext)
+    Update-Database
+
+** Create Relationship
+
+6) Create class Model\Author.cs
+
+7) Add link in Book
+        public int AuthroId { get; set; }
+        public Author Author { get; set; }
+
+8) Add Author to LibraryContext
+        public DbSet<Author> Authors { get; set; }
+
+9) Add updated start data to LibraryContext
+
+            modelBuilder.Entity<Author>().HasData(
+                new Author
+                {
+                    Id = 1,
+                    Name = "Mary Delamater"
+                },
+                new Author
+                {
+                    Id = 2,
+                    Name = "Bjarne Stroustrup"
+                });
+
+
+            modelBuilder.Entity<Book>().HasData(
+                new Book
+                {
+                    BookId = 1,
+                    Name = "Core MVC",
+                    Year = 2022,
+                    AuthorId = 1
+                },
+                new Book
+                {
+                    BookId = 2,
+                    Name = "The C++ Programming Language",
+                    Year = 2000,
+                    AuthorId = 2
+                });
+
+10) Add latest migration
+    Add-Migration AddAuthor
+
+11) Update Database
+    Update-Database
+
+** NOTE: We will need to update all of the views to handle the new authors
+
+12) Scaffold Database
+    Scaffold-DbContext "Name=ConnectionStrings:LibraryContext" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\Scaffold
