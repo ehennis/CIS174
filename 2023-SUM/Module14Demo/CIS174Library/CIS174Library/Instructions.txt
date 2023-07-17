@@ -1,0 +1,125 @@
+﻿***********
+*Module 14*
+***********
+Authentication and Authorization
+1) Install Microsoft.AspNetCore.Identity.EntityFrameworkCore
+    (I had to install 6.0.5 since *.7 didn't match)
+=== Run Update-Database to get base level database ===
+2) Create Models\User class
+3) Add IdentityDbContext<User> to LibraryContext
+    public class LibraryContext: IdentityDbContext<User>
+4) Create Migration for new tables
+    Add-Migration AddIdentityTables
+5) Update Database
+    Update-Database
+=== Look at all the AspNet* tables ===
+
+6) Add Identity service to Program.cs
+    builder.Services.AddIdentity<User, IdentityRole>()
+        .AddEntityFrameworkStores<LibraryContext>()
+        .AddDefaultTokenProviders();
+7) Add Identity service to Program.cs WITH Options
+    builder.Services.AddIdentity<User, IdentityRole>(options =>
+    {
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireDigit = false;
+    })
+        .AddEntityFrameworkStores<LibraryContext>()
+        .AddDefaultTokenProviders();
+8) Add Authentication and Authorization to Program.cs
+            app.UseAuthorization();
+            app.UseAuthentication();
+9) Add Login Button Code to _Layout.cshtml
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <!-- Login buttons and links -->
+                @using Microsoft.AspNetCore.Identity
+                @using CIS174Library.Models;
+                @inject SignInManager<User> signInManager
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            // signed-in user - Log Out button and username
+                        <li class="nav-item">
+                            
+                            <form method="post" asp-action="LogOut" asp-controller="Account" asp-area="">
+                                <input type="submit" value="Log Out"/>
+                                <span class="text-light">@User.Identity.Name</span>
+                            </form>
+                        </li>
+                        }
+                        else
+                        {
+                            // anonymous user - Register link and Log In button
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">&nbsp;Log In</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+10) Create Models\RegisterViewModel.cs
+11) Create Models\LoginViewModel.cs
+12) Create Controller\AccountController.cs
+13) Create Views\Account\AccessDenied.cshtml, Login.cshtml, Register.cshtml
+14) Create LibraryContext static method to create the admin account and role
+
+        public static async Task CreateAdminUser(IServiceProvider serviceProvider)
+        {
+            using (var scoped = serviceProvider.CreateScope())
+            {
+                UserManager<User> userManager = scoped.ServiceProvider.GetRequiredService<UserManager<User>>();
+                RoleManager<IdentityRole> roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                string username = "admin";
+                string pwd = "admin";
+                string roleName = "Admin";
+
+                // if role doesn't exist, create it
+                if (await roleManager.FindByNameAsync(roleName) == null)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+
+                if (await userManager.FindByNameAsync(username) == null)
+                {
+                    User user = new User() { UserName = username };
+                    var result = await userManager.CreateAsync(user, pwd);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, roleName);
+                    }
+                }
+            }
+        }
+
+15) Add static call to Program.cs
+    await LibraryContext.CreateAdminUser(app.Services);
+== Run and create user ==
+16) Add [Authorize] to SecureController
+	using Microsoft.AspNetCore.Authorization;
+17) Add [AllowAnonymous] to SecureController.Evan
+
+
+
+** Testing [Authorize] **
+
+        [TestMethod]
+        public void CheckAuthorization()
+        {
+            SecureController controller = new SecureController();
+            var type = controller.GetType();
+            var attribute = type.GetCustomAttribute(typeof(AuthorizeAttribute));
+            Assert.IsNotNull(attribute);
+
+            var logger = new Mock<ILogger<HomeController>>();
+            var lrMock = new Mock<ILibraryRepository>();
+            HomeController home = new HomeController(logger.Object, lrMock.Object);
+            var ht = home.GetType();
+            var att = ht.GetCustomAttribute(typeof(AuthorizeAttribute));
+            Assert.IsNull(att);
+        }
+
+
