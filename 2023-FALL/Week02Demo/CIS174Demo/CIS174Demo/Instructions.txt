@@ -67,15 +67,7 @@
     Add-Migration Initial -> Creates YYYYMMDD#####_Initial.cs
     Update-Database -> Creates the database
 10) Validate files and database were created correctly
-11) Use Linq in 'HomeController' to query movies
-        public IActionResult Index()
-        {
-            var movies = context.Movies
-                .OrderBy(m => m.Name)
-                .ToList();
-            return View(movies);
-        }
-12) Update 'appsettings.json' to display the queries
+11) Update 'appsettings.json' to display the queries
   "Logging": {
     "LogLevel": {
       "Default": "Information",
@@ -84,8 +76,8 @@
       "Microsoft.EntityFrameworkCore.Database.Command": "Debug"
     }
   }
-13) 'HomeController'
-    public class HomeController : Controller
+12) Create 'MovieController'
+    public class MovieController : Controller
     {
         private MovieContext context { get; set; }
 
@@ -100,7 +92,7 @@
             return View(movies);
         }
     }
-14) Add UI to 'Index.cshtml'
+13) Add UI to 'Index.cshtml'
 @model List<Movie>
 @{
     ViewBag.Title = "My Movies";
@@ -134,22 +126,21 @@
 </table>
 ** Since I already created the movie files for this demo and they won't get changed
 with genre changes I am going to just keep them created **
-15) Create 'MovieController'
-16) Create 'Movie\Edit.cshtml'
-17) Create 'Movie\Delete.cshtml'
+14) Create 'Movie\Edit.cshtml'
+15) Create 'Movie\Delete.cshtml'
 ** Adding Genre **
-18) Create 'Genre' model
+16) Create 'Genre' model
     public class Genre
     {
         public string GenreId { get; set; }
         public string Name { get; set; }
     }
-19) Add reference to 'Movie' model
+17) Add reference to 'Movie' model
        [Required(ErrorMessage = "Please enter a genre.")]
         public string GenreId { get; set; }
         // .NET 6.0 will REQUIRE this if not nullable
         public Genre? Genre { get; set; }
-20) Add Genre to 'MovieContext'
+18) Add Genre to 'MovieContext'
     public class MovieContext : DbContext
     {
         public MovieContext(DbContextOptions<MovieContext> options)
@@ -195,15 +186,69 @@ with genre changes I am going to just keep them created **
             );
         }
     }
-21) Create database migration
+19) Create database migration
     Add-Migration Genre
     Update-Database
-22) Include Genre in 'HomeController.Index'
+20) Include Genre in 'MovieController.Index'
             var movies = context.Movies.Include(m => m.Genre).OrderBy(m => m.Name).ToList();
-23) Include Genre in 'Index.cshtml'
+21) Include Genre in 'Index.cshtml'
             <th>Genre</th>
             <td>@movie.Genre.Name</td>
-24) Create Add, Edit, and Delete to 'MovieController'
+22) Add 'Add' to 'MovieController'
+        [HttpGet]
+        public IActionResult Add()
+        {
+            ViewBag.Action = "Add";
+            return View("Edit", new Movie());
+        }
+23) Add 'Edit' to 'MovieController'
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            var movie = this.context.Movies.Find(id);
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                if (movie.MovieId == 0)
+                {
+                    this.context.Movies.Add(movie);
+                }
+                else
+                {
+                    // Should already be updated
+                }
+                this.context.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (movie.MovieId == 0) ? "Add" : "Edit";
+                return View(movie);
+            }
+        }
+24) And 'Delete' to 'MovieController'
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var movie = this.context.Movies.Find(id);
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Movie movie)
+        {
+            //context.Movies.Remove(movie);
+            //context.SaveChanges();
+            this.context.Movies.Remove(movie);
+            this.context.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
 25) Add Genre to 'Edit.cshtml'
 @model Movie
 
