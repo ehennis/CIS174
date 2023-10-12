@@ -1,0 +1,47 @@
+﻿**********
+*Module 8*
+**********
+
+**Session State
+1) Add ConfigureServices Methods
+        // MUST BE CALLED before AddControllersWithViews
+        builder.Services.AddMemoryCache();
+        builder.Services.AddSession();
+2) Add Configure Methods
+            // MUST BE CALLED before UseEndpoints
+            app.UseSession();
+
+3) Create SessionController.cs
+4) Add Session code to Index()
+            int num = HttpContext.Session.GetInt32("num") ?? 0;
+            num += 1;
+            HttpContext.Session.SetInt32("num", num);
+
+5) Create Views\Session\Index.cshtml
+    <h1 class="display-4">Session Count: @Context.Session.GetInt32("num")</h1>
+
+6) Run https://localhost:7028/Session/Index
+
+
+**Cookies
+7) Append Cookie in SessionController (Index)
+            var options = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+            Response.Cookies.Append("username", "evan", options);
+
+8) Get Cookie in SessionController (Cookie)
+            var usrname = Request.Cookies["username"];
+            ViewBag.UserName = usrname;
+
+9) Display Cookie in Cookie.cshtml
+    <p>User Name: @ViewBag.UserName</p>
+
+10) Run https://localhost:7028/Session/Cookie
+
+11) Layout Additions: Added Session and Cookie to _Layout.cshtml
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="Index">Session</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="Cookie">Cookie</a>
+    </li>
+
