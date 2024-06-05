@@ -1,0 +1,60 @@
+﻿**********
+*Module 3*
+**********
+
+// Create Repository/Unit of Work Design Pattern
+	IIS -> Controller -> {Unit of Work (repository and DbContext)} -> EF/Database
+1) Add Repository
+	Create Repository folder
+	Create 'ILibraryRepository.cs'
+	Create 'LibraryRepository.cs'
+2) Replace LibraryContext with ILibraryRepository in 'HomeController.cs'
+        Private Variable
+        Constructor parameter
+        Index Method
+3) Replace LibraryContext with ILibraryRepository in 'LibraryController.cs'
+        Private Variable
+        Constructor parameter
+        Edit Methods
+        Delete Methods
+
+4) Add Startup.cs DI code: 
+	builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
+
+// TESTING
+5) Create LibraryListTest "MSTest Project"
+6) Install 'Moq' from NuGet
+7) Create 'LibraryControllerTest.cs'
+    NOTE: Uncomment out the tests and look at the branches of code that are tested
+
+** Use actual DbContext **
+    NOTE: This does NOT work without a LOT of rework. Skip this unless you
+    want to do a lot of research on Linq functions. Therefore, we will not
+    cover this in class.
+
+    To start:
+        You will need to set the DbSet properties to virtual
+        You will then need to have a special default constructor to ignore the DbOptions
+        You will then need to research how to fake/moq all of the DbSet functions
+
+** Use In Memory **
+8) Add Micorosoft.EntityFrameworkCore.InMemory from NuGet
+9) Create 'LibraryRepositoryTest.cs'
+10) Create InMemmory LibraryContext
+            var inmemory = new DbContextOptionsBuilder<LibraryContext>()
+                .UseInMemoryDatabase("Filename=test.db")
+                .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .Options;
+11) Test drive GetAllBooks(..)
+
+
+*********************
+12) Create a null exception on save by uncommenting LibraryControler Edit method
+    Notice exception at the top of the 'Exception Throw' dialog
+    Explore the stack trace by hitting 'Show Call Stack'
+13) Demo Error Page: Rerun 12 and hit F5 to get past the error dialog and you see the error web page
+14) Typically, you do NOT want to expose much information to the end users.
+    a) Add the exception handler to an empty error page on line 25 on Program.cs
+    NOTE: Line 19 does this same code but the IF on line 17 is ONLY for non-development code
+
+15) Place a break point (F9 or click in the margins) on each of the Home and Library Controllers and see the flow of the web site
