@@ -1,0 +1,103 @@
+﻿***********
+*Module 10*
+***********
+
+**Data Validation
+1) Add 'Add Book' button to home\Index.cshtml
+    <a asp-controller="Library" asp-action="Add" class="btn btn-primary">Add New Book</a> 
+
+2) Notice HttpGet Add method in LibraryController
+        [HttpGet]
+        public IActionResult Add()
+        {
+            ViewBag.Action = "Add";
+            return View("Edit", new Book());
+        }
+
+3) Notice HttpPost Edit method in LibraryController
+        [HttpPost]
+        public IActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                if (book.BookId == 0)
+                {
+                    this.libraryRepository.InsertBook(book);
+                }
+                else
+                {
+                    this.libraryRepository.UpdateBook(book);
+                }
+                this.libraryRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+                return View(book);
+            }
+        }
+
+4) Add validation tags to Models\Book.cs
+        [Required(ErrorMessage = "Please enter a name.")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Please enter a year.")]
+        [Range(1889, 2050, ErrorMessage = "Year must be between 1889 and now.")]
+        public int? Year { get; set; }
+
+5) Ensure asp-validation is added to Library\Edit.cshtml
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+6) Run web site with INVALID model values
+
+7) Add Custom Validation to LibraryController HttpPost Edit
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+            // Custom Validation
+            string key = nameof(Book.Name);
+            var val = ModelState.GetValidationState(key);
+            if (val == ModelValidationState.Valid)
+            {
+                if( book.Name == "Evan")
+                {
+                    ModelState.AddModelError(key, "Don't use your first name!");
+                }
+            }
+
+8) Add Field Level validation to Edit.cshtml
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+
+****************************
+** Client Side Validation **
+****************************
+9) Add scripts to Library\Edit.cshtml
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+10) Run invalid Add and notice we NEVER hit the backend code. This was all client side!
+
+**Custom Client Side Validation
+11) Add wwwroot\js\bookname.js
+
+12) Add Models\BookName.cs
+
+13) Add [BookName] to Model.cs
+        [BookName]
+        [Required(ErrorMessage = "Please enter a name.")]
+        public string Name { get; set; }
+
+14) Add custom include script for bookname.js
+    <script src="~/js/bookname.js"></script>
+
+15) Try adding a book with the name 'EvanH' and notice the JS file handle the validation
+
+16) Try adding a book with the name 'EvanHennis' and notice the BookName custom validator go to work
+
+17) View source on Library\Edit
