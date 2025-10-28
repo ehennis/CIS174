@@ -24,7 +24,7 @@
 6) Create class Model\Author.cs
 
 7) Add link in Book
-        public int AuthroId { get; set; }
+        public int AuthorId { get; set; }
         public Author Author { get; set; }
 
 8) Add Author to LibraryContext
