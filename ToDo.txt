@@ -9,3 +9,11 @@ To Fix:
 	Final: -20pts if Azure doesn't work
 	Final Rubrik: Remove April 27th line
 	Demo 3 needs to be updated. Copy from 2023-SUM
+
+
+========================
+Change all the assignments to GitHub links
+Add setup videos
+	GitHub Instructions
+	Course Overview
+?? Can we add videos to a shell and use the same ones?
