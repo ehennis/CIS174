@@ -58,7 +58,7 @@
         }
 6) Setup Connection String (replace your server name and instance)
   "ConnectionStrings": {
-    "MovieContext": "Server=DESKTOP-53R4CQT\\MSSQLSERVER01;Database=Movies;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "MovieContext": "Server=DESKTOP-53R4CQT\\MSSQLSERVER01;Database=Movies;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true"
   }
 7) Add DI for DbContext
     builder.Services.AddDbContext<MovieContext>(options =>
@@ -81,7 +81,7 @@
     {
         private MovieContext context { get; set; }
 
-        public HomeController(MovieContext ctx)
+        public MovieController(MovieContext ctx)
         {
             context = ctx;
         }
@@ -221,10 +221,10 @@ with genre changes I am going to just keep them created **
                 }
                 else
                 {
-                    // Should already be updated
+                    this.context.Movies.Update(movie);
                 }
                 this.context.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Movie");
             }
             else
             {
