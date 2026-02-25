@@ -1,0 +1,88 @@
+﻿1) IActionResult RedirectToAction
+    LibraryController.cs
+        [HttpPost]
+        public IActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                if (book.BookId == 0)
+                {
+                    this.libraryRepository.InsertBook(book);
+                }
+                else
+                {
+                    this.libraryRepository.UpdateBook(book);
+                }
+                this.libraryRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+                return View(book);
+            }
+        }
+
+2) ViewData
+    HomeController -> Index
+            ViewData["ViewDataProperty"] = "View Data Works!";
+    Index.cshtml
+            <h2>@ViewData["ViewDataProperty"]</h2>
+
+3) ViewBag
+    HomeController -> Index
+            ViewBag.Name = "Student";
+    Index.cshtml
+            <h1 class="display-4">Welcome @ViewBag.Name</h1>
+            
+4) Transfer Data between View and Controller (HttpGet -> View -> HttpPost -> Redirect)
+    LibraryController.cs
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            var movie = this.libraryRepository.Find(id);
+            return View(movie);
+        }
+    Edit.cshtml
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Year">Year</label>
+                <input asp-for="Year" class="form-control">
+            </div>
+
+            <input type="hidden" asp-for="BookId" />
+
+            <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    LibraryController.cs
+        [HttpPost]
+        public IActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                if (book.BookId == 0)
+                {
+                    this.libraryRepository.InsertBook(book);
+                }
+                else
+                {
+                    this.libraryRepository.UpdateBook(book);
+                }
+                this.libraryRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+                return View(book);
+            }
+        }
