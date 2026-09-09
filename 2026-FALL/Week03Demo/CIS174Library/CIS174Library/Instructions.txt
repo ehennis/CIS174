@@ -1,0 +1,44 @@
+﻿**********
+*Module 3*
+**********
+
+// Create Repository/Unit of Work Design Pattern
+	IIS -> Controller -> {Unit of Work (repository and DbContext)} -> EF/Database
+1) Add Repository
+	Create Repository folder
+	Create 'ILibraryRepository.cs'
+	Create 'LibraryRepository.cs'
+2) Replace LibraryContext with ILibraryRepository in 'HomeController.cs'
+        private ILibraryRepository libraryRepository;
+            List<Book> books = libraryRepository.GetAllBooks();
+3) Replace LibraryContext with ILibraryRepository in 'LibraryController.cs'
+
+4) Add Startup.cs DI code: 
+	builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
+
+// TESTING
+5) Create LibraryListTest "MSTest Project"
+6) Install 'Moq' from NuGet
+7) Create 'HomeControllerTest.cs'
+** Use actual DbContext **
+8) Create 'LibraryRepositoryTest.cs'
+9) Add 'virtual' to DbSet properties
+10) Add default constructor to LibraryContext
+        public LibraryContext() : base() { }
+** Use In Memory **
+11) Add Micorosoft.EntityFrameworkCore.InMemory from NuGet
+12) Create 'LibraryRepositoryInMemoryTest.cs'
+13) Create InMemmory LibraryContext
+            var inmemory = new DbContextOptionsBuilder<LibraryContext>()
+                .UseInMemoryDatabase("Filename=test.db")
+                .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .Options;
+14) Test drive GetAllMovies(..)
+
+
+*********************
+Create a null exception on save
+Show the stack trace
+Demo Error Page
+Demo Error Helper
+Demo breakpoints
