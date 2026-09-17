@@ -1,0 +1,33 @@
+Git Demo
+=========
+1) Create repository in GitHub
+2) Clone locally
+	git clone ...git
+	SourceTree: New Repository -> Remove -> Select from dropdown after connecting GitHub
+3) Clone in different folder
+** Happy Path **
+4) Add empty text file and commit
+5) Pull down in other repository
+	git pull
+	SourceTree: Pull
+** Make conflicting changes **
+6) Make changes in both places
+	Add "First Line"
+	Add "Other First"
+7) Push changes
+	git commit -a -m 'First Commit'
+	git push
+	SourceTree: Commit
+	SourceTree: Push
+8) Resolve conflict and push
+** Branching **
+9) Create branch in GitHub
+10) Add code changes
+	Add "New Change"
+11) Push changes
+	git commit -a -m 'New changes'
+	git push
+	SourceTree: Commit
+	SourceTree: Push
+12) Create PR in GitHub
+13) Review PR and Merge
