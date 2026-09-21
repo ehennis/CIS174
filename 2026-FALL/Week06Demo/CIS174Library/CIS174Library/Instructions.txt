@@ -1,0 +1,110 @@
+﻿**********
+*Module 6*
+**********
+
+**Razor Syntax
+1) Inline syntax
+    Index.cshtml
+    <h1 class="display-4">Welcome @ViewBag.Name</h1>
+
+2) Block syntax (Conditional)
+    Index.cshtml
+    @if (ViewBag.Name == "Student")
+            {
+                <p>Hello, Student</p>
+            }
+
+3) Block syntax (Loop)
+        @foreach (var book in Model) {
+        <tr>
+            <td>@book.Name</td>
+            <td>@book.Year</td>            
+            <td>
+                <a asp-controller="Library" asp-action="Edit"
+                   asp-route-id="@book.BookId"
+                   class="btn btn-primary">Edit</a>
+                <a asp-controller="Library" asp-action="Delete"
+                   asp-route-id="@book.BookId"
+                   class="btn btn-primary">Delete</a>
+            </td>
+        </tr>
+        }
+
+4) Razor Project Setup
+    \Controllers
+        *Controller
+    \Views
+        \Controller Name
+            *Views (Must match action name or name specified)
+
+5) Displaying Razor Views using View() [https://localhost:7028/Home/Privacy]
+    HomeController.cs
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+6) Displaying Razor Views using View(name) [https://localhost:7028/Home/OtherPrivacy]
+    HomeController.cs
+        public IActionResult OtherPrivacy()
+        {
+            return View("Privacy");
+        }
+
+7) _ViewStart.cshtml sets the layout
+8) _Layout.cshtml sets the default layout
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+9) _ViewImports.cshtml sets all the global layouts
+
+10) asp-controller, asp-action, and asp-route-param_name
+    Delete.cshtml
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="BookId" />
+
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+
+11) Create data model (\Models\Book.cs)
+
+12) Pass a model to a view
+    LibraryController.cs
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            var movie = this.libraryRepository.Find(id);
+            return View(movie);
+        }
+
+13) Import Book's namespace
+    _ViewImports.cshtml
+        @using CIS174Library.Models
+14) Bind Book model to the Edit view
+    Edit.cshtml
+        @model Book
+
+15) Reference model properties
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Year">Year</label>
+            <input asp-for="Year" class="form-control">
+        </div>
+
+        <input type="hidden" asp-for="BookId" />
+
+        <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+
