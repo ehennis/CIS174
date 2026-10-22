@@ -1,0 +1,63 @@
+﻿**Model Binding
+1) Create a link in Home\Index.cshtml to call LibraryController\Edit (Note: link passes in an ID)
+                <a asp-controller="Library" asp-action="Edit"
+                   asp-route-id="@book.BookId"
+                   class="btn btn-primary">Edit</a>
+
+2) Create HttpGet Edit method in LibraryController.cs
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.Action = "Edit";
+            var movie = this.libraryRepository.Find(id);
+            return View(movie);
+        }
+
+3) Create Library\Edit.cshtml to display the model data (Note: Model binding)
+
+
+4) Create <form> in Library\Edit.cshtml
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Year">Year</label>
+            <input asp-for="Year" class="form-control">
+        </div>
+
+        <input type="hidden" asp-for="BookId" />
+
+        <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+
+5) Create HttpPost Edit method in LibraryController.cs
+        [HttpPost]
+        public IActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                if (book.BookId == 0)
+                {
+                    this.libraryRepository.InsertBook(book);
+                }
+                else
+                {
+                    this.libraryRepository.UpdateBook(book);
+                }
+                this.libraryRepository.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Action = (book.BookId == 0) ? "Add" : "Edit";
+                return View(book);
+            }
+        }
+
+6) Run web site -> Edit button -> View Edit.cshtml -> Save -> View Home\Index
