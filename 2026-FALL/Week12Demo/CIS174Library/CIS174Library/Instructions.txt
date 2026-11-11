@@ -1,0 +1,20 @@
+﻿***********
+*Module 12*
+***********
+1) Create \Repository\*
+2) Add ILibraryRepository to HomeController constructor
+3) Add service and repository to Startup.cs
+	builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
+
+=== Run Code ===
+4) Add MSTest Test Project (can use xUnit as well)
+5) Add Moq from NuGet
+6) Add Project reference
+7) Create HomeController Tests
+=== In Class Coding ===
+8) Create Service Tests
+9) Create Repository Tests
+10) Create Math class
+11) Test Math class with [DataRow]
+
+
